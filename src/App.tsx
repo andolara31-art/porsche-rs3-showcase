@@ -1052,12 +1052,10 @@ export default function App() {
 
       {/* ── SPECS GRID ───────────────────────────────────────────────────── */}
       <section className="py-24 md:py-40 relative overflow-hidden">
-        {/* Video background */}
-        <video autoPlay muted loop playsInline preload="auto" className="absolute inset-0 w-full h-full object-cover" style={{ zIndex: 0 }}>
-          <source src="/videos/porsche-loop.mp4" type="video/mp4" />
-        </video>
+        {/* Image background */}
+        <img src="/images/porsche-numbers-bg.jpg" alt="" aria-hidden="true" className="absolute inset-0 w-full h-full object-cover" style={{ zIndex: 0 }} />
         {/* Dark overlay */}
-        <div style={{ position: 'absolute', inset: 0, background: 'rgba(0,0,0,0.55)', zIndex: 1 }} />
+        <div className="absolute inset-0 bg-black/60" style={{ zIndex: 1 }} />
         {/* Content */}
         <div className="max-w-6xl mx-auto px-6 md:px-16 relative" style={{ zIndex: 2 }}>
           <div className="mb-14">
