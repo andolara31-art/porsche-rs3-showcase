@@ -532,9 +532,11 @@ function GT3DScene() {
     // ── Animation loop
     const clock = new THREE.Clock()
     let rafId = 0
+    let isVisible = false
 
     const animate = () => {
       rafId = requestAnimationFrame(animate)
+      if (!isVisible) return
       const t = clock.getElapsedTime()
 
       if (!isDragging) targetRotY += 0.0035
@@ -552,6 +554,10 @@ function GT3DScene() {
     }
     animate()
 
+    // Pause rendering when off-screen
+    const visObs = new IntersectionObserver(([entry]) => { isVisible = entry.isIntersecting }, { threshold: 0.05 })
+    visObs.observe(el)
+
     // ── Resize
     const onResize = () => {
       if (!el) return
@@ -563,6 +569,7 @@ function GT3DScene() {
 
     return () => {
       cancelAnimationFrame(rafId)
+      visObs.disconnect()
       renderer.domElement.removeEventListener('mousedown', onDown)
       window.removeEventListener('mousemove', onMove)
       window.removeEventListener('mouseup', onUp)
@@ -771,8 +778,12 @@ export default function App() {
   useEffect(() => {
     const canvas = waveRef.current; if (!canvas) return
     const c = canvas.getContext('2d'); if (!c) return
+    let waveVisible = false
+    const waveVisObs = new IntersectionObserver(([e]) => { waveVisible = e.isIntersecting }, { threshold: 0.05 })
+    waveVisObs.observe(canvas)
     const draw = () => {
       waveRaf.current = requestAnimationFrame(draw)
+      if (!waveVisible) return
       const w = canvas.width, h = canvas.height
       c.clearRect(0, 0, w, h)
       c.fillStyle = '#000'; c.fillRect(0, 0, w, h)
@@ -795,7 +806,7 @@ export default function App() {
       }
     }
     draw()
-    return () => cancelAnimationFrame(waveRaf.current)
+    return () => { cancelAnimationFrame(waveRaf.current); waveVisObs.disconnect() }
   }, [])
 
   const toggleMute = useCallback(() => {
@@ -1042,14 +1053,9 @@ export default function App() {
       {/* ── SPECS GRID ───────────────────────────────────────────────────── */}
       <section className="py-24 md:py-40 relative overflow-hidden">
         {/* Video background */}
-        <video
-          autoPlay
-          muted
-          loop
-          playsInline
-          style={{ position: 'absolute', inset: 0, width: '100%', height: '100%', objectFit: 'cover', zIndex: 0 }}
-          src="https://fwjdikkenbolqnyadgyq.supabase.co/storage/v1/object/sign/ima/higgsfield-99bf8f36-c4ba-4c2e-981e-1763456542f5.mp4?token=eyJraWQiOiJzdG9yYWdlLXVybC1zaWduaW5nLWtleV9jNTU1MzE4Ny1lNWQ2LTQyN2ItYjQzZi1kZjVlZWE4MzAwZGEiLCJhbGciOiJIUzI1NiJ9.eyJ1cmwiOiJpbWEvaGlnZ3NmaWVsZC05OWJmOGYzNi1jNGJhLTRjMmUtOTgxZS0xNzYzNDU2NTQyZjUubXA0IiwiaWF0IjoxNzc0MDEzMDk4LCJleHAiOjE4MDU1NDkwOTh9.OEoG55EELnICcf6s4fyxMba6MwSbFx6KtAAQSnxE6RE"
-        />
+        <video autoPlay muted loop playsInline preload="auto" className="absolute inset-0 w-full h-full object-cover" style={{ zIndex: 0 }}>
+          <source src="/videos/porsche-loop.mp4" type="video/mp4" />
+        </video>
         {/* Dark overlay */}
         <div style={{ position: 'absolute', inset: 0, background: 'rgba(0,0,0,0.55)', zIndex: 1 }} />
         {/* Content */}
