@@ -1040,13 +1040,25 @@ export default function App() {
       </section>
 
       {/* ── SPECS GRID ───────────────────────────────────────────────────── */}
-      <section className="py-24 md:py-40 bg-[#040404]">
-        <div className="max-w-6xl mx-auto px-6 md:px-16">
+      <section className="py-24 md:py-40 relative overflow-hidden">
+        {/* Video background */}
+        <video
+          autoPlay
+          muted
+          loop
+          playsInline
+          style={{ position: 'absolute', inset: 0, width: '100%', height: '100%', objectFit: 'cover', zIndex: 0 }}
+          src="https://fwjdikkenbolqnyadgyq.supabase.co/storage/v1/object/sign/ima/higgsfield-99bf8f36-c4ba-4c2e-981e-1763456542f5.mp4?token=eyJraWQiOiJzdG9yYWdlLXVybC1zaWduaW5nLWtleV9jNTU1MzE4Ny1lNWQ2LTQyN2ItYjQzZi1kZjVlZWE4MzAwZGEiLCJhbGciOiJIUzI1NiJ9.eyJ1cmwiOiJpbWEvaGlnZ3NmaWVsZC05OWJmOGYzNi1jNGJhLTRjMmUtOTgxZS0xNzYzNDU2NTQyZjUubXA0IiwiaWF0IjoxNzc0MDEzMDk4LCJleHAiOjE4MDU1NDkwOTh9.OEoG55EELnICcf6s4fyxMba6MwSbFx6KtAAQSnxE6RE"
+        />
+        {/* Dark overlay */}
+        <div style={{ position: 'absolute', inset: 0, background: 'rgba(0,0,0,0.55)', zIndex: 1 }} />
+        {/* Content */}
+        <div className="max-w-6xl mx-auto px-6 md:px-16 relative" style={{ zIndex: 2 }}>
           <div className="mb-14">
             <p className="font-mono-custom text-[9px] text-[#8C8C8C] tracking-[0.45em] uppercase mb-3">Chapter 03</p>
             <h2 className="font-condensed font-bold text-white leading-none" style={{ fontSize: 'clamp(38px, 7vw, 88px)' }}>BY THE NUMBERS</h2>
           </div>
-          <div ref={specsRef} className="grid grid-cols-2 md:grid-cols-3 gap-px bg-[#111]">
+          <div ref={specsRef} className="grid grid-cols-2 md:grid-cols-3 gap-px bg-[#111]/60">
             {SPECS.map((s, i) => <SpecCard key={s.label} spec={s} i={i} active={specsVis} />)}
           </div>
         </div>
